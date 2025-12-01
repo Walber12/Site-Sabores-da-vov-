@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Sabores da vovó</title>
+  <style>
+    :root{
+      --vinho:#6f2727; /* fundo do site */
+      --vinho-escuro:#4a0707; /* retângulos um pouco mais foscos */
+      --laranja:#ff7a1a; /* laranja vivo */
+      --preto:#000;
+      --branco:#fff;
+      --header-height:120px;
+      --stripe-thin:6px;
+    }
+
+    html{scroll-behavior:smooth}
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background:var(--vinho);
+      color:var(--branco);
+      line-height:1.4;
+      padding-top:var(--header-height); /* espaço para header fixed */
+    }
+
+    header{
+      position:fixed;
+      top:0;
+      left:0;
+      right:0;
+      z-index:9999;
+      display:flex;
+      flex-direction:column;
+      box-shadow:0 3px 8px rgba(0,0,0,0.4);
+    }
+
+    .header-row{
+      display:flex;
+      align-items:center;
+      gap:16px;
+      padding:10px 18px;
+    }
+
+    /* Linha 1: logo (círculo laranja) + faixa branca com botões */
+    .row-top{background:var(--laranja);}
+    .logo{
+      width:84px;height:84px;border-radius:50%;
+      overflow:hidden;flex:0 0 84px;display:flex;align-items:center;justify-content:center;
+      border:4px solid var(--preto);
+      background:var(--laranja);
+    }
+    .logo img{width:100%;height:100%;object-fit:cover;display:block}
+
+    .nav-white{
+      background:var(--branco);
+      display:flex;align-items:center;padding:10px;border-radius:6px;flex-wrap:wrap;gap:8px;
+      margin-left:8px;flex:1;justify-content:flex-start
+    }
+    .nav-white a{background:transparent;color:var(--preto);text-decoration:none;padding:8px 14px;border-radius:6px;font-weight:600}
+    .nav-white a:hover{background:rgba(0,0,0,0.06)}
+
+    /* fineline preto separador */
+    .stripe-black{height:var(--stripe-thin);background:var(--preto)}
+
+    /* faixa laranja sem botões (apenas espaçamento visual) */
+    .row-orange{background:var(--laranja);height:36px;padding:6px 18px}
+
+    /* informações em branco sobre fundo laranja com texto pequeno */
+    .info-bar{background:var(--laranja);padding:10px 18px;display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+    .info-item{font-size:13px;font-weight:600;color:var(--branco)}
+
+    /* outra listra final preta */
+
+    /* --- Conteúdo --- */
+    main{padding:28px}
+    section{padding:36px 24px;background:transparent;margin-bottom:18px}
+
+    /* separador visual entre seções (faixa fina) */
+    .section-separator{height:6px;background:var(--preto);margin:12px 0;border-radius:2px}
+
+    /* Sobre nós */
+    .sobre{display:flex;gap:20px;align-items:center}
+    .sobre img{max-width:360px;width:40%;border-radius:12px;object-fit:cover;border:4px solid var(--laranja)}
+    .sobre .texto{flex:1}
+
+    /* Kit festa: imagens alinhadas horizontalmente */
+    .kit-festa .items{display:flex;gap:16px;flex-wrap:nowrap;overflow:auto;padding:12px}
+    .kit-festa .item{display: flex;width:360px ;border:4px solid var(--laranja);border-radius:10px;padding:6px;background:rgba(255,255,255,0.03)}
+    .kit-festa img{width:100%;height:500px;object-fit:cover;border-radius:8px}
+
+    /* Salgados - layout em colunas */
+    .salgados{display:flex;gap:20px;align-items:center}
+    .salgados .texto{flex:1;background:var(--vinho-escuro);padding:18px;border-radius:10px}
+    .salgados .valores{min-width:160px;margin-left:12px;background:rgba(0,0,0,0.12);padding:12px;border-radius:8px}
+    .salgados img{width:320px;height:240px;object-fit:cover;border-radius:14px;transition:transform .25s ease}
+    .salgados img:hover{transform:scale(1.06)}
+
+    /* Salgados assados (imagens à esquerda) */
+    .salgados-assados{display:flex;gap:20px;align-items:center}
+    .salgados-assados img{width:320px;height:240px;object-fit:cover;border-radius:14px;transition:transform .25s ease}
+    .salgados-assados img:hover{transform:scale(1.06)}
+    .salgados-assados .texto{flex:1;background:var(--vinho-escuro);padding:18px;border-radius:10px}
+    .salgados-assados .valores{min-width:160px;margin-left:12px;background:rgba(0,0,0,0.12);padding:12px;border-radius:8px}
+
+    /* Momentos marcantes - carrossel mostrando 2 por vez */
+    .momentos{margin-top:6px}
+    .carousel{width:100%;overflow:hidden}
+    .carousel-track{display:flex;gap:12px;transition:transform .45s ease}
+    .carousel-item{flex:0 0 calc(50% - 6px);border-radius:10px;overflow:hidden}
+    .carousel-item img{width:100%;height:260px;object-fit:cover;display:block}
+    .carousel-controls{display:flex;gap:8px;justify-content:center;margin-top:10px}
+    .btn{background:var(--laranja);border:none;padding:8px 12px;border-radius:8px;color:var(--preto);font-weight:700;cursor:pointer}
+
+    /* Bolos: áreas de texto e imagens */
+    .bolos{display:flex;gap:18px;align-items:center}
+    .bolos .texto{flex:1;padding:18px;background:var(--vinho-escuro);border-radius:10px}
+    .bolos img{width:300px;height:220px;object-fit:cover;border-radius:14px}
+
+    .orange-box{background:var(--laranja);color:var(--preto);padding:14px;border-radius:10px;margin-top:12px}
+
+    /* Doces: imagens horizontais */
+    .doces{display:flex;gap:12px;flex-wrap:nowrap;overflow:auto}
+    .doces img{width:260px;height:180px;object-fit:cover;border-radius:10px;border:3px solid var(--laranja)}
+
+    /* Rodapé */
+    footer{
+      padding:36px 22px;background-image:url('./Imagens/BolosFundo.jpg');background-size:cover;background-position:center;color:var(--preto)}
+    .footer-card{background:rgba(255,255,255,0.92);padding:18px;border-radius:10px;max-width:880px;margin:0 auto}
+    .footer-title{font-size:20px;font-weight:800;margin-bottom:8px}
+    .form-row{display:flex;gap:12px;flex-wrap:wrap}
+    input[type=text], input[type=email]{padding:8px;border-radius:6px;border:1px solid #bbb;width:100%}
+    .radios{display:flex;gap:12px;align-items:center}
+    .submit{background:var(--laranja);border:none;padding:10px 14px;border-radius:8px;font-weight:800;cursor:pointer}
+
+    /* Responsividade simples */
+    @media(max-width:900px){
+      .salgados,.salgados-assados,.bolos{flex-direction:column}
+      .sobre img{width:100%;height:auto}
+      .kit-festa .items{padding-bottom:12px}
+      .carousel-item img{height:160px}
+    }
+
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-row row-top">
+    <div class="logo">
+      <img src="./Imagens/Sabores-da-vov%C3%B3-vetorizada.png" alt="Logo Sabores da vovó">
+    </div>
+    <div class="nav-white">
+      <a href="#kit-festa">Kit festa</a>
+      <a href="#salgados">Salgados</a>
+      <a href="#bolos">Bolos</a>
+    </div>
+  </div>
+  <div class="stripe-black"></div>
+  <div class="info-bar">
+    <div class="info-item">Até 7 dias para receber seu pedido</div>
+    <div class="info-item">Parcelamentos sem valor mínimo em até 12x</div>
+    <div class="info-item">Entregas flexíveis todos os dias</div>
+    <div class="info-item">100% seguro — aqui você pode confiar</div>
+  </div>
+  <div class="stripe-black"></div>
+</header>
+
+<main>
+  <!-- SOBRE NÓS -->
+  <p></p>
+  <p></p>
+  <p></p>
+  <p></p>
+  <p></p>
+  <p></p>
+  <p></p>
+  <section id="sobre" class="sobre">
+    <img src="./Imagens/Av%C3%B3_e_Neta.avif" alt="Avó e neta">
+    <div class="texto">
+      <h2>Sobre nós</h2>
+      <p>Sabores da vovó nasceu do amor pelas receitas caseiras: quitutes feitos com carinho, ingredientes frescos e tradição. Produzimos para festinhas, entregas e encomendas especiais — tudo pensado para transformar ocasiões em memórias gostosas.</p>
+    </div>
+  </section>
+
+  <div class="section-separator"></div>
+
+  <!-- KIT FESTA -->
+  <section id="kit-festa" class="kit-festa">
+    <h2>Kit festa</h2>
+    <div class="items">
+      <div class="item"><img src="./Imagens/kit festa 1.jpg" alt="Kit festa 1"></div>
+      <div class="item"><img src="./Imagens/kit festa 2.png" alt="Kit festa 2"></div>
+      <div class="item"><img src="./Imagens/kit festa 3.png" alt="Kit festa 3"></div>
+    </div>
+        <a id="salgados">
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+  </section>
+
+  <div class="section-separator"></div>
+
+  <!-- SALGADOS -->
+  <section>
+    <p></p>
+    <p></p>
+    <h2>Salgados</h2>
+    <div class="salgados">
+      <div class="texto">
+        <h3>Salgados Fritos</h3>
+        <p>'Salgados Fritos' - coxinha de frango com catupiry; bolinha de queijo; risoles de presunto e queijo; kibe com carne temperada.</p>
+        <p>Feitos com massa leve, fritos na hora e temperados com ingredientes frescos, garantindo aquele sabor caseiro que todo mundo ama!</p>
+      </div>
+      <div class="valores">
+        <strong>Valores:</strong>
+        <p>Cento: R$100,00<br>50 unidades: R$55,00<br>20 unidades: R$25,00</p>
+      </div>
+      <img src="./Imagens/SalgadosFritos.png" alt="Salgados Fritos">
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="salgados-assados">
+      <img src="./Imagens/SalgadosAssados.jpg" alt="Salgados Assados">
+      <div class="valores">
+        <strong>Valores:</strong>
+        <p>Cento: R$100,00<br>50 unidades: R$55,00<br>20 unidades: R$25,00</p>
+      </div>
+      <div class="texto">
+        <h3>Salgados Assados</h3>
+        <p>Nosso kit inclui: Esfiha de carne temperada; Empadinha de frango com requeijão; Enroladinho de presunto e queijo; Mini pastel de forno de calabresa.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Momentos marcantes com carrossel (duas imagens por vez) -->
+  <section class="momentos">
+    <h2 style="font-size:30px">Momentos marcantes e deliciosos</h2>
+    <div class="carousel">
+      <div class="carousel-track" id="carouselTrack">
+        <div class="carousel-item"><img src="./Imagens/Festa4.webp" alt="Festa 4"></div>
+        <div class="carousel-item"><img src="./Imagens/Festa1.webp" alt="Festa 1"></div>
+        <div class="carousel-item"><img src="./Imagens/Festa2.webp" alt="Festa 2"></div>
+        <div class="carousel-item"><img src="./Imagens/Festa3.webp" alt="Festa 3"></div>
+      </div>
+    </div>
+    <div class="carousel-controls">
+      <button class="btn" id="prevBtn">◀</button>
+      <button class="btn" id="nextBtn">▶</button>
+    <a id="bolos"></a>
+    </div>
+  </section>
+  
+  <div class="section-separator"></div>
+
+  <!-- BOLOS -->
+  <section>
+    <h2>Bolos</h2>
+    <div class="bolos">
+      <div class="texto">
+        <p>Transforme sua comemoração em um momento inesquecível! Bolos decorados sob medida, com temas personalizados, sabores variados e muito sabor em cada detalhe.</p>
+      </div>
+      <img src="./Imagens/Bolo2andares1.webp" alt="Bolo 2 andares">
+      <div class="texto" style="min-width:160px">
+        <strong>Opções:</strong>
+        <p>1 andar: R$120,00<br>2 andares: R$180,00<br>3 andares: R$250,00</p>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:16px;margin-top:12px;align-items:center;flex-wrap:wrap">
+      <div style="margin-top:12px;background:var(--vinho-escuro);padding:12px;border-radius:10px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <div class="valores">
+        <p>P (6 fatias): R$50,00; <br> M (10 fatias): R$70,00; <br> G (15 fatias): R$90,00</p>
+        </div>
+        <img src="./Imagens/RedVelvet.jpg" alt="Red Velvet" style="width:280px;height:200px;border-radius:12px;object-fit:cover;">
+        <div style="flex:1;background:var(--vinho-escuro);padding:12px;border-radius:10px">
+          <h4>Elegância em forma de bolo!</h4>
+          <p>Massa aveludada com toque de cacau e um recheio leve de creme de queijo, perfeito para ocasiões especiais ou para se presentear.</p>
+        </div>
+      </div>  
+    </div>
+
+    <div style="margin-top:12px;background:var(--vinho-escuro);padding:12px;border-radius:10px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+      <div style="flex:1">
+        <h4>Nosso clássico bolo vulcão</h4>
+        <p>Nosso clássico bolo vulcão é pura tentação! Massa fofinha coberta por uma generosa camada de calda cremosa de chocolate que transborda a cada fatia.</p>
+      </div>
+      <img src="./Imagens/BoloVulc%C3%A3o.jpg" alt="Bolo Vulcão" style="width:260px;height:180px;border-radius:12px;object-fit:cover">
+      <div style="min-width:140px">
+        <strong>Preços:</strong>
+        <p>P(6 fatias): R$40,00<br>M(10 fatias): R$60,00<br>G(15 fatias): R$80,00</p>
+      </div>
+    </div>
+  </section>
+
+  <div style="height:12px"></div>
+
+  <!-- DOCES -->
+  <section>
+    <h2 style="font-size:28px">Doces para todos os gostos</h2>
+    <div class="doces">
+      <img src="./Imagens/canudinhos-recheados.jpg" alt="Canudinhos">
+      <img src="./Imagens/DocesEspeciais.jpg" alt="Doces Especiais">
+      <img src="./Imagens/DocesMicros.png" alt="Doces Micros">
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-card">
+    <div class="footer-title">Trabalhe conosco</div>
+    <form action="mailto:saboresdavovo68@gmail.com" method="POST" enctype="text/plain">
+      <div class="form-row">
+        <div style="flex:1">
+          <label>Nome completo<br><input type="text" name="nome" required></label>
+        </div>
+        <div style="flex:1">
+          <label>Email<br><input type="email" name="email" required></label>
+        </div>
+        <div style="flex:1">
+          <label>Cidade<br><input type="text" name="cidade" required></label>
+        </div>
+      </div>
+
+      <div style="margin-top:12px" class="radios">
+        <label><input type="radio" name="vaga" value="Confeiteiro" required> Confeiteiro</label>
+        <label><input type="radio" name="vaga" value="Caixa"> Caixa</label>
+        <label><input type="radio" name="vaga" value="Entregador"> Entregador</label>
+        <label><input type="radio" name="vaga" value="Gerente"> Gerente</label>
+      </div>
+
+      <div style="margin-top:12px">
+        <button type="submit" class="submit">Enviar candidatura</button>
+      </div>
+    </form>
+    <p style="font-size:12px;margin-top:8px;color:#333"></p>
+  </div>
+</footer>
+
+<script>
+  // Carrossel simples que avança/devolve uma posição (duas imagens visíveis por vez)
+  (function(){
+    const track = document.getElementById('carouselTrack');
+    const prev = document.getElementById('prevBtn');
+    const next = document.getElementById('nextBtn');
+    const items = track.children.length;
+    const perView = 2;
+    let index = 0; // page index (0..)
+
+    function update(){
+      const itemWidth = track.children[0].getBoundingClientRect().width + 12; // gap
+      const move = index * (itemWidth * perView);
+      track.style.transform = `translateX(-${move}px)`;
+    }
+
+    next.addEventListener('click', ()=>{
+      const maxIndex = Math.ceil(items / perView) - 1;
+      index = Math.min(maxIndex, index+1);
+      update();
+    });
+    prev.addEventListener('click', ()=>{
+      index = Math.max(0, index-1);
+      update();
+    });
+
+    // ajuste em redimensionamento
+    window.addEventListener('resize', update);
+  })();
+</script>
+
+</body>
+</html>
